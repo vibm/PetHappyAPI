@@ -12,6 +12,11 @@ spec.register(server) #registra os endpoints do servidor 'server'
 database = TinyDB(storage=MemoryStorage) # "persiste isso aqui pra mim num arquivo database.json"
 c = count()
 
+# Query para buscar uma pessoa
+class QueryPessoa(BaseModel):
+    id: Optional[int]
+    nome: Optional[str]
+    idade: Optional[int]
 
 class Pessoa(BaseModel):
     id: Optional[int] = Field(default_factory=lambda: next(c))
@@ -24,9 +29,17 @@ class Pessoas(BaseModel):
 
 ## -------->>   GET   <<--------   
 @server.get('/pessoas') #_Rota, endpoint, recurso ...
-@spec.validate(resp=Response(HTTP_200=Pessoas))
+@spec.validate(
+    query=QueryPessoa,
+    resp=Response(HTTP_200=Pessoas)
+)
 def buscar_pessoas():
     """Retorna todas as Pessoas da base de dados"""
+    query = request.context.query.dict(exclude_none=True)
+    breakpoint()
+    todas_as_pessoas = database.search(
+        Query().fragment(query)
+    )
     return jsonify(
         Pessoas(
             pessoas=database.all(),
