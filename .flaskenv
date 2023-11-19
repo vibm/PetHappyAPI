@@ -1,1 +1,1 @@
-FLASK_APP=pethappyapi.py
+FLASK_APP=app.py

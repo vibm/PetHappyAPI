@@ -7,7 +7,7 @@ from tinydb import TinyDB, Query
 from tinydb.storages import MemoryStorage
 
 server = Flask(__name__)
-spec = FlaskPydanticSpec('flask', title='PetHappyAPI')
+spec = FlaskPydanticSpec('flask', title='App')
 spec.register(server) #registra os endpoints do servidor 'server'
 database = TinyDB(storage=MemoryStorage) # "persiste isso aqui pra mim num arquivo database.json"
 c = count()
